@@ -1,0 +1,46 @@
+# Sample multi-stage Dockerfile for Warden static analysis testing
+# Demonstrates realistic configurations, stages, flags, and continuations
+
+# Global build argument
+ARG BASE_ALPINE=alpine:3.19
+
+# Build stage 1: Compile binary
+FROM golang:1.22-alpine AS builder
+
+WORKDIR /src
+
+# Copy go module manifests
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy source code and build
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o /bin/warden ./cmd/warden
+
+# Final production stage
+FROM ${BASE_ALPINE}
+
+LABEL maintainer="security-team@example.com"
+LABEL version="1.0.0"
+
+# Install runtime certificates
+RUN apk update && \
+    apk add --no-cache ca-certificates && \
+    rm -rf /var/cache/apk/*
+
+# Create unprivileged user
+RUN addgroup -g 10001 appgroup && \
+    adduser -u 10001 -G appgroup -D -s /sbin/nologin appuser
+
+WORKDIR /home/appuser
+
+# Copy compiled artifact from builder stage with proper ownership
+COPY --from=builder --chown=appuser:appgroup /bin/warden /usr/local/bin/warden
+
+# Set non-root execution context
+USER 10001:10001
+
+EXPOSE 8080
+
+ENTRYPOINT ["/usr/local/bin/warden"]
+CMD ["--help"]
