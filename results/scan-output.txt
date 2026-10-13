@@ -1,0 +1,11 @@
+================================================================================
+                          WARDEN SECURITY SCAN REPORT                           
+================================================================================
+Target File : testdata/docker-compose.secure.yml
+Target Type : docker-compose.yml
+Scanned At  : 2026-10-13T05:07:08Z
+--------------------------------------------------------------------------------
+Summary: 0 findings [CRITICAL: 0, HIGH: 0, MEDIUM: 0, LOW: 0]
+================================================================================
+
+✔ No misconfigurations detected. Target configuration meets all security rules.

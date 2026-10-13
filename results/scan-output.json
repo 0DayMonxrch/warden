@@ -1,0 +1,13 @@
+{
+  "targetFile": "testdata/docker-compose.secure.yml",
+  "targetType": "docker-compose.yml",
+  "scannedAt": "2026-10-13T05:07:08Z",
+  "summary": {
+    "total": 0,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "findings": null
+}

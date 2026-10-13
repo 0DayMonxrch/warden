@@ -10,13 +10,13 @@ import (
 
 // Instruction represents a single Dockerfile instruction (e.g., FROM, RUN, USER, COPY).
 type Instruction struct {
-	Name      string   `json:"name"`                // e.g. "FROM", "RUN", "USER"
-	Args      []string `json:"args"`                // e.g. ["alpine:3.19", "as", "builder"] or ["appuser"]
-	Flags     []string `json:"flags,omitempty"`     // e.g. ["--chown=1000:1000", "--from=builder"]
-	StartLine int      `json:"startLine"`           // 1-indexed starting line
-	EndLine   int      `json:"endLine"`             // 1-indexed ending line
-	Original  string   `json:"original"`            // Raw line from source
-	Stage     int      `json:"stage"`               // 0-indexed stage index this instruction belongs to
+	Name      string   `json:"name"`            // e.g. "FROM", "RUN", "USER"
+	Args      []string `json:"args"`            // e.g. ["alpine:3.19", "as", "builder"] or ["appuser"]
+	Flags     []string `json:"flags,omitempty"` // e.g. ["--chown=1000:1000", "--from=builder"]
+	StartLine int      `json:"startLine"`       // 1-indexed starting line
+	EndLine   int      `json:"endLine"`         // 1-indexed ending line
+	Original  string   `json:"original"`        // Raw line from source
+	Stage     int      `json:"stage"`           // 0-indexed stage index this instruction belongs to
 
 	// RawNode preserves the underlying BuildKit AST node for advanced queries.
 	RawNode *parser.Node `json:"-"`
@@ -24,10 +24,10 @@ type Instruction struct {
 
 // Stage represents a build stage in a multi-stage Dockerfile starting with a FROM instruction.
 type Stage struct {
-	Index        int           `json:"index"`                  // 0-indexed stage order
-	BaseImage    string        `json:"baseImage"`              // e.g. "golang:1.22-alpine"
-	Name         string        `json:"name,omitempty"`         // AS <name>, e.g. "builder"
-	Instructions []Instruction `json:"instructions"`           // Instructions within this stage
+	Index        int           `json:"index"`          // 0-indexed stage order
+	BaseImage    string        `json:"baseImage"`      // e.g. "golang:1.22-alpine"
+	Name         string        `json:"name,omitempty"` // AS <name>, e.g. "builder"
+	Instructions []Instruction `json:"instructions"`   // Instructions within this stage
 }
 
 // ParsedDockerfile is the structured representation of a parsed Dockerfile.

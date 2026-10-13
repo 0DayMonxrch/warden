@@ -1,0 +1,52 @@
+{
+  "rules": [
+    {
+      "id": "RULE-001",
+      "name": "Exposed Docker Daemon Socket",
+      "severity": "CRITICAL",
+      "target": ["docker-compose.yml"],
+      "description": "Exposing /var/run/docker.sock allows containers full root access to the host Docker daemon, leading to potential host takeover.",
+      "mitigation": "Avoid mounting docker.sock. Use a scoped API proxy or eBPF/kernel-based drivers (e.g., Falco) for monitoring."
+    },
+    {
+      "id": "RULE-002",
+      "name": "Container Running as Root",
+      "severity": "HIGH",
+      "target": ["Dockerfile", "docker-compose.yml"],
+      "description": "Running containers as root increases the impact of privilege escalation attacks.",
+      "mitigation": "Define a non-root user in the Dockerfile using USER instruction or specify user in Docker Compose."
+    },
+    {
+      "id": "RULE-003",
+      "name": "Unnecessary Linux Capabilities",
+      "severity": "MEDIUM",
+      "target": ["docker-compose.yml"],
+      "description": "Excessive Linux capabilities broaden the attack surface. Using --privileged grants all host capabilities.",
+      "mitigation": "Drop unneeded capabilities with 'cap_drop: [ALL]' and selectively add required ones with 'cap_add'. Never use privileged mode."
+    },
+    {
+      "id": "RULE-004",
+      "name": "In-Container Privilege Escalation Allowed",
+      "severity": "MEDIUM",
+      "target": ["docker-compose.yml"],
+      "description": "Processes inside the container can gain new privileges via setuid or setgid binaries.",
+      "mitigation": "Set security option 'no-new-privileges:true' in your container runtime or Compose configuration."
+    },
+    {
+      "id": "RULE-005",
+      "name": "Missing Resource Limits",
+      "severity": "HIGH",
+      "target": ["docker-compose.yml"],
+      "description": "Lack of CPU, memory, restart, or process limits makes the host vulnerable to Denial of Service (DoS) attacks.",
+      "mitigation": "Define 'cpus', 'memory', restart limits, and ulimits (nofile, nproc) in your container specification."
+    },
+    {
+      "id": "RULE-006",
+      "name": "Writable Root Filesystem",
+      "severity": "MEDIUM",
+      "target": ["docker-compose.yml"],
+      "description": "A writable root filesystem enables attackers to modify application files or write malicious binaries.",
+      "mitigation": "Set 'read_only: true' and use tmpfs mounts for temporary directory writes."
+    }
+  ]
+}

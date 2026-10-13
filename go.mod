@@ -5,6 +5,7 @@ go 1.27.1
 require (
 	github.com/moby/buildkit v0.33.1
 	github.com/spf13/cobra v1.10.2
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (

@@ -1,0 +1,9 @@
+# Vulnerable Dockerfile that does not specify a non-root USER
+FROM alpine:3.19
+
+RUN apk update && apk add --no-cache curl
+
+EXPOSE 8080
+
+ENTRYPOINT ["curl"]
+CMD ["--help"]

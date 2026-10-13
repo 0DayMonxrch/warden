@@ -1,0 +1,10 @@
+version: "3.8"
+
+# Vulnerable Docker Compose manifest for testing Warden security rules
+services:
+  # Insecure service triggering RULE-001, RULE-002, RULE-003, RULE-004, RULE-005, RULE-006
+  insecure-app:
+    image: nginx:latest
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
